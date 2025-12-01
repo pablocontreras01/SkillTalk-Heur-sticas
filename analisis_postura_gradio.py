@@ -33,7 +33,7 @@ OUTPUT_DIR_MP = 'temp_mediapipe'
 os.makedirs(OUTPUT_DIR_MP, exist_ok=True)
 
 # ⚡ OPTIMIZACIÓN DE VELOCIDAD: Factor de Salto de Fotogramas
-FRAME_SKIP_FACTOR = 10 # Procesar 1 de cada 10 frames para la pose
+FRAME_SKIP_FACTOR = 2 # Procesar 1 de cada 10 frames para la pose
 
 # Parámetros de Análisis
 FPS = 30
