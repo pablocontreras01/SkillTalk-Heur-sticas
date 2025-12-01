@@ -11,18 +11,23 @@ OUTPUT_DIR = "temp_outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
+# 🛑 CORRECCIÓN CLAVE: El argumento 'progress' ya NO tiene un valor por defecto.
+# Gradio inyecta el valor automáticamente al llamarla.
 def gradio_processor(video_path_input: Optional[str], progress) -> Tuple[Optional[str], str, str]:
     """
     Función wrapper que llama al pipeline de análisis heurístico.
+    El objeto 'progress' es inyectado por Gradio.
     """
     if video_path_input is None:
         raise gr.Error("Por favor, sube un archivo de video para el análisis.")
         
-    # Crear una ruta de salida temporal única
+    # Rutas
     timestamp = int(time.time())
     output_video_path = os.path.join(OUTPUT_DIR, f"feedback_video_{timestamp}.mp4")
     
     try:
+        # Llama a la función principal, pasando 'progress' como argumento de palabra clave
+        # Esto es correcto porque Gradio lo inyecta como keyword argument en el nivel superior.
         final_video_path, report_markdown, posture_table_markdown = run_analysis_for_gradio(
             video_path_input, 
             output_video_path, 
@@ -54,13 +59,12 @@ iface = gr.Interface(
     ],
     
     title="🔬 Análisis Heurístico de Postura SkillTalk",
-    description="Analiza la postura y el movimiento (rigidez, gesticulación, mirada) para generar un reporte cuantitativo."
-    # 🛑 ALLOW_FLAGGING FUE ELIMINADO PARA COMPATIBILIDAD CON TU VERSIÓN DE GRADIO
+    description="Analiza la postura y el movimiento (rigidez, gesticulación, mirada) para generar un reporte cuantitativo.",
 )
 
 # 3. Iniciar la interfaz
 iface.launch(
     server_name="0.0.0.0", 
-    server_port=int(os.environ.get("PORT", 7860))
-    # server_timeout fue eliminado previamente para evitar errores en algunas versiones de Gradio
+    server_port=int(os.environ.get("PORT", 7860)),
+    # server_timeout fue omitido para evitar errores de versión en launch()
 )
