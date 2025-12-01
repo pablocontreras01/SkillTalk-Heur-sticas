@@ -11,7 +11,7 @@ OUTPUT_DIR = "temp_outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
-def gradio_processor(video_path_input: Optional[str], progress=gr.Progress()) -> Tuple[Optional[str], str, str]:
+def gradio_processor(video_path_input: Optional[str], progress) -> Tuple[Optional[str], str, str]:
     """
     Función wrapper que llama al pipeline de análisis heurístico.
     """
